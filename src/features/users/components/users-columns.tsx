@@ -1,12 +1,12 @@
-import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table/column-header'
 import { LongText } from '@/components/long-text'
 import { DataTableRowActions } from '@/features/users/components/data-table-row-actions'
 import { cn } from '@/lib/utils'
 import { ColumnDef } from '@tanstack/react-table'
-import { callTypes, roles } from '../data/data'
+import { roles } from '../data/data'
 import { User } from '../data/schema'
+import { motion } from 'motion/react'
 
 export const UsersColumns: ColumnDef<User>[] = [
   {
@@ -84,14 +84,56 @@ export const UsersColumns: ColumnDef<User>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const { status } = row.original
-      const badgeColor = callTypes.get(status)
+      const status = row.getValue('status') as string
+      
+      const statusConfig: Record<string, { color: string; dot: string; bg: string }> = {
+        active: {
+          color: 'text-emerald-700 dark:text-emerald-300',
+          dot: 'bg-emerald-500',
+          bg: 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20',
+        },
+        inactive: {
+          color: 'text-slate-600 dark:text-slate-400',
+          dot: 'bg-slate-400',
+          bg: 'bg-slate-400/10 dark:bg-slate-400/20 border-slate-400/20',
+        },
+        invited: {
+          color: 'text-sky-700 dark:text-sky-300',
+          dot: 'bg-sky-500',
+          bg: 'bg-sky-500/10 dark:bg-sky-500/20 border-sky-500/20',
+        },
+        suspended: {
+          color: 'text-red-700 dark:text-red-300',
+          dot: 'bg-red-500',
+          bg: 'bg-red-500/10 dark:bg-red-500/20 border-red-500/20',
+        },
+      }
+
+      const config = statusConfig[status] || statusConfig.inactive
+
       return (
-        <div className="flex space-x-2">
-          <Badge variant="outline" className={cn('capitalize', badgeColor)}>
-            {row.getValue('status')}
-          </Badge>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.05 }}
+          className={cn(
+            "inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-wide border backdrop-blur-md transition-all",
+            config.bg,
+            config.color
+          )}
+        >
+          <span className="relative flex h-2 w-2">
+            {status === 'active' && (
+              <motion.span 
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className={cn("absolute inline-flex h-full w-full rounded-full opacity-75", config.dot)}
+              />
+            )}
+            <span className={cn("relative inline-flex rounded-full h-2 w-2", config.dot)} />
+          </span>
+          <span className="capitalize">{status}</span>
+        </motion.div>
       )
     },
     filterFn: (row, id, value) => {
@@ -114,12 +156,24 @@ export const UsersColumns: ColumnDef<User>[] = [
       }
 
       return (
-        <div className="flex items-center gap-x-2">
-          {userType.icon && (
-            <userType.icon size={16} className="text-muted-foreground" />
-          )}
-          <span className="text-sm capitalize">{row.getValue('role')}</span>
-        </div>
+        <motion.div 
+          whileHover={{ x: 5 }}
+          className="flex items-center gap-x-3 group cursor-default"
+        >
+          <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-secondary/50 border border-border/50 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all duration-300">
+            {userType.icon && (
+              <userType.icon size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
+            )}
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[13px] font-bold capitalize tracking-tight leading-none">
+              {row.getValue('role')}
+            </span>
+            <span className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium">
+              Access Level
+            </span>
+          </div>
+        </motion.div>
       )
     },
     filterFn: (row, id, value) => {
