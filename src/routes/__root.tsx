@@ -66,6 +66,20 @@ function RootComponent() {
   return (
     <html lang="en" className="font-system">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function() {
+              try {
+                var theme = document.cookie.match(/vite-ui-theme=([^;]+)/);
+                var themeValue = theme ? decodeURIComponent(theme[1]) : 'system';
+                var isDark = themeValue === 'dark' || (themeValue === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                document.documentElement.classList.toggle('dark', isDark);
+              } catch (e) {}
+            })()
+          `,
+          }}
+        />
         <HeadContent />
       </head>
       <body>
