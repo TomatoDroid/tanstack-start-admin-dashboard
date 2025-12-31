@@ -9,6 +9,7 @@
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier",
+    "screenshots": "node scripts/capture-screenshots.js",
     "check": "prettier --write . && eslint --fix",
     "deploy": "gh-pages -d dist"
   },
@@ -100,6 +101,7 @@
     "eslint": "^9.39.2",
     "gh-pages": "^6.3.0",
     "jsdom": "^27.3.0",
+    "playwright": "^1.57.0",
     "prettier": "^3.7.4",
     "tw-animate-css": "^1.4.0",
     "typescript": "^5.9.3",

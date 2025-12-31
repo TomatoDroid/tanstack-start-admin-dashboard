@@ -10,6 +10,11 @@
 
 本项目支持亮色和暗色两种主题模式，提供一致的用户体验。
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="public/dark-dashboard.png">
+  <img alt="项目预览" src="public/light-dashboard.png">
+</picture>
+
 ### 亮色主题
 ![亮色主题 Dashboard](public/light-dashboard.png)
 
