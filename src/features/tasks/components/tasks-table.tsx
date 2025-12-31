@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table'
 import { useTableUrlState } from '@/hooks/use-table-url-state'
 import { cn } from '@/lib/utils'
-import { rankItem } from '@tanstack/match-sorter-utils'
+import { RankingInfo, rankItem } from '@tanstack/match-sorter-utils'
 import { getRouteApi } from '@tanstack/react-router'
 import {
   flexRender,
@@ -20,6 +20,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
   SortingState,
   useReactTable,
   VisibilityState
@@ -34,7 +35,7 @@ type TasksTableProps = {
   data: Task[]
 }
 // Define a custom fuzzy filter function that will apply ranking info to rows (using match-sorter utils)
-const fuzzyFilter = (row, columnId, value, addMeta) => {
+const fuzzyFilter = (row: Row<Task>, columnId: string, value: string, addMeta: (meta: { itemRank: RankingInfo }) => void) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value)
 
