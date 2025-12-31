@@ -64,7 +64,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootComponent() {
   return (
-    <html lang="en" className="font-system">
+    <html lang="en">
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -75,6 +75,18 @@ function RootComponent() {
                 var themeValue = theme ? decodeURIComponent(theme[1]) : 'system';
                 var isDark = themeValue === 'dark' || (themeValue === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
                 document.documentElement.classList.toggle('dark', isDark);
+
+                var font = document.cookie.match(/font=([^;]+)/);
+                var fontValue = font ? decodeURIComponent(font[1]) : 'system';
+                var fonts = ['system', 'roboto', 'noto-sans-sc', 'noto-serif-sc', 'borel'];
+                for (var i = 0; i < fonts.length; i++) {
+                  document.documentElement.classList.remove('font-' + fonts[i]);
+                }
+                document.documentElement.classList.add('font-' + fontValue);
+
+                var dir = document.cookie.match(/dir=([^;]+)/);
+                var dirValue = dir ? decodeURIComponent(dir[1]) : 'ltr';
+                document.documentElement.setAttribute('dir', dirValue);
               } catch (e) {}
             })()
           `,
