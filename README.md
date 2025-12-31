@@ -15,12 +15,6 @@
   <img alt="项目预览" src="public/light-dashboard.png">
 </picture>
 
-### 亮色主题
-![亮色主题 Dashboard](public/light-dashboard.png)
-
-### 暗色主题
-![暗色主题 Dashboard](public/dark-dashboard.png)
-
 ## 技术栈一览
 
 - **运行时**：React 19 + Vite 7（SSR & Streaming ready）
